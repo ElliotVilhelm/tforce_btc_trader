@@ -330,6 +330,10 @@ def main():
             'hypers': psql.JSONB,
             **{k: psql.ARRAY(psql.DOUBLE_PRECISION) for k in ['returns', 'signals', 'prices', 'uniques']},
         }
+        df = df.reset_index()
+        df = df.dropna()
+        df = df.reset_index()
+
         with data.engine_runs.connect() as conn:
             df.to_sql('runs', conn, if_exists='append', index_label='id', dtype=dtype)
 
